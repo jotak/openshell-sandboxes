@@ -1,0 +1,52 @@
+## Interaction style
+- Default to propose-then-act: before any non-trivial action (creating or
+  editing files, state-changing commands, installing things), present a short
+  plan of what you intend to do and ask whether to proceed or adjust.
+- Proceed without asking only for read-only exploration, trivial edits, or
+  when I explicitly say to work autonomously.
+- Check in at natural milestones instead of disappearing until the end.
+- When several approaches exist, present them with trade-offs rather than
+  picking one silently.
+
+## Sandbox awareness (you run inside an OpenShell sandbox)
+
+This is deliberate isolation chosen by the user. Never try to escape or defeat it.
+
+Environment:
+- HOME=/workspace (read-write, your working dir). /home/goose (Go caches,
+  GOPATH=/home/goose/go) and /tmp are writable too. Everything else (/usr, /etc,
+  /opt...) is read-only — apt/dnf cannot install anything.
+- No container runtime, no Kubernetes/OpenShift cluster, no systemd inside.
+- Installed: go, clang/llvm, node+npm, python3. `go install`ed tools land in
+  /home/goose/go/bin (on PATH).
+
+Network — default-deny with a read-only allowlist (GET/HEAD/OPTIONS only):
+- Allowed hosts (snapshot 2026-11): github.com, **.github.com,
+  **.githubusercontent.com, **.golang.org, go.dev, registry.npmjs.org,
+  pypi.org, **.pythonhosted.org, crates.io, **.redhat.com, **.nvidia.com,
+  huggingface.co. All POST/PUT/PATCH is blocked everywhere.
+
+Recognize these instantly instead of debugging them:
+- git clone/push/fetch over HTTPS fails with HTTP 403 on POST /git-upload-pack
+  → policy, not a git bug. Repos arrive as git bundles (clone from
+  /workspace/*.bundle) or plain uploads (.git is stripped). Public repo content
+  is readable via the GitHub REST API (GET).
+- Timeouts or connection refused for non-allowlisted hosts, localhost services,
+  loopback, cluster APIs → policy, not a network bug.
+- Missing binary (docker, kubectl, oc, gh, ...) → not installed, cannot be
+  installed from inside.
+- go/npm/pip downloads DO work (registries are allowlisted, reads suffice).
+
+If a task needs something the sandbox blocks — a tool, write access to an
+external service, a cluster, a new network destination — do NOT improvise
+workarounds or simulate the missing capability. Stop early and tell the user:
+what you tried, what was blocked, and the concrete unblock:
+- missing tool/package → suggest adding it to the sandbox image (Dockerfile)
+- blocked host or method → suggest allowing it in the OpenShell network policy
+- missing input materials (PR diffs, must-gathers, logs) → ask the user to
+  upload them to the workspace
+Expect a policy hot-reload or an image rebuild + sandbox recreate, then retry.
+
+What works well here: building, testing, linting, codegen for repos in
+/workspace; reading public code and docs; producing artifacts (binaries, git
+bundles, reports) in /workspace for the user to download.

@@ -1,0 +1,58 @@
+version: 1.0.0
+title: Implement and Verify
+description: 'Implement a change in the current repository and verify it: build and run the test suite, iterating until everything passes. Defaults match the NetObserv Go repositories (make-based); override the commands for other layouts such as the web console.'
+instructions: |
+  You are implementing a change in the current repository.
+
+  Task: {{ task }}
+
+  ## Interaction
+  - Before editing anything, present your implementation plan (approach,
+    files you expect to touch) and confirm it with the user, unless they
+    have explicitly asked you to work autonomously.
+  - Check in at meaningful milestones; when done, summarize changes and how
+    they were verified.
+
+  ## Discipline
+  1. Keep it interactive. This is not vibe-coding, this is an interactive session, with discussion.
+     If something isn't clear or if there are several relevant options, let the user know.
+     If the user contravenes the following points, take their word for it.
+  2. Explore before editing: understand the module structure, existing
+     patterns, and any AGENTS.md, CONTRIBUTING.md or .goosehints in the repo.
+     Follow the conventions of the surrounding code.
+  3. Implement in small, coherent steps. Keep the diff minimal: no drive-by
+     reformatting, no unrelated changes.
+  4. Verify at milestones with these commands and iterate until green:
+     - Build: {{ build_command }}
+     - Tests: {{ test_command }}
+     When a test fails, fix the root cause rather than weakening the test.
+  5. Add or update tests covering the new behavior, in the style of the
+     repo's existing tests.
+  6. Update generated files, docs, or manifests when the repo requires it
+     (for example operator CRDs and manifests, or generated eBPF bindings).
+  7. Do not git-commit or push, unless asked explicitly.
+  8. Finish with: a summary of the changes, how you verified them, the exact
+     commands you ran with their outcome, and anything left for manual review.
+     Include a small reminder of the commit trailers that the user can copy-paste in their commit:
+     "Co-authored-by: <agent name>" and "Generated-with: <model name>".
+     Use them if you're asked to commit and include sign-off with the preconfigured user.
+     Don't try to guess the model name, ask the user if you don't know.
+prompt: |
+  Implement the following in this repository: {{ task }}
+  Verify with "{{ build_command }}" and "{{ test_command }}" and iterate.
+activities: []
+parameters:
+- key: task
+  input_type: string
+  requirement: required
+  description: 'What to implement: feature, bug fix, or refactor'
+- key: build_command
+  input_type: string
+  requirement: optional
+  description: Build command to run for verification
+  default: make build
+- key: test_command
+  input_type: string
+  requirement: optional
+  description: Test command to run for verification
+  default: make test

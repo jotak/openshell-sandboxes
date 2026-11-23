@@ -1,0 +1,20 @@
+# goose configuration baked into the sandbox image.
+# Schema: active_provider / providers keys per
+# https://goose-docs.ai/docs/guides/config-files
+#
+# The API key is NOT stored here: OpenShell sets ENMAAS_API_KEY to an
+# opaque placeholder inside the sandbox, and the supervisor injects the real
+# key only into requests bound for api.enmaas.devshift.net (see enmaas.yaml).
+
+active_provider: custom_enmaas
+providers:
+  custom_enmaas:
+    enabled: true
+    model: rits/zai-org/glm-5-3
+    configured: true
+
+# To switch the default model, use one of the models declared in
+# custom_enmaas.json, e.g.:
+#   rits/zai-org/glm-5-3
+#   rits/deepseek-ai/DeepSeek-V4.1-Flash-1017
+#   rits/meta-models/Muse-Spark-Open-816B-A42B-NVFP4

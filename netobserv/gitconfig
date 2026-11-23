@@ -1,0 +1,14 @@
+# System-wide git configuration baked into the sandbox image (/etc/gitconfig).
+#
+# Why system scope: inside the sandbox HOME=/workspace and no .gitconfig exists
+# there, and /etc is read-only at runtime (Landlock) — so this file gives the
+# agent a stable commit identity it cannot modify. Global scope would work too
+# (a .gitconfig in /workspace) but is writable by the agent and lost on upload
+# clashes; system scope survives and stays fixed.
+#
+# Changes here require an image rebuild + sandbox recreate.
+[user]
+	name = Joel Takvorian
+	email = jtakvori@redhat.com
+[init]
+	defaultBranch = main

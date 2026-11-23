@@ -1,0 +1,35 @@
+# OpenShell provider profile — corporate enmaas LLM gateway (OpenAI-compatible)
+#
+# The real API key is stored in the OpenShell gateway credential store and is
+# injected by the supervisor ONLY into requests bound for the endpoint below.
+# The sandbox itself only ever sees an opaque placeholder in $ENMAAS_API_KEY.
+#
+# Import with:
+#   openshell profile lint -f enmaas.yaml
+#   openshell profile import -f enmaas.yaml
+
+id: enmaas
+display_name: enmaas (corporate OpenAI-compatible LLM gateway)
+description: >
+  Corporate enmaas gateway exposing an OpenAI-compatible API. Credentials are
+  endpoint-bound: the placeholder resolves only at api.enmaas.devshift.net.
+category: inference
+inference_capable: true
+
+credentials:
+  - name: api_key
+    env_vars: [ENMAAS_API_KEY]
+    auth_style: header
+    header_name: Authorization
+
+endpoints:
+  - host: api.enmaas.devshift.net
+    port: 443
+    protocol: rest
+    access: read-write        # GET/HEAD/OPTIONS/POST/PUT/PATCH — chat completions are POST
+    enforcement: enforce
+    path: /v1/**
+
+binaries:
+  - /usr/local/bin/goose     # the agent binary (also covers processes it starts)
+  - /usr/bin/curl            # for direct verification/testing from inside the sandbox
