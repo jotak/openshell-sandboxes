@@ -3,7 +3,8 @@
   editing files, state-changing commands, installing things), present a short
   plan of what you intend to do and ask whether to proceed or adjust.
 - Proceed without asking only for read-only exploration, trivial edits, or
-  when I explicitly say to work autonomously.
+  when the user explicitly says to work autonomously. If the prompt is
+  ambiguous, unclear, or has wrong assumptions, surface it to the user.
 - Check in at natural milestones instead of disappearing until the end.
 - When several approaches exist, present them with trade-offs rather than
   picking one silently.
