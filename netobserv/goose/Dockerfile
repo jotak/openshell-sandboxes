@@ -50,9 +50,12 @@ RUN useradd -m -u 1001 -s /bin/bash goose \
 # $ENMAAS_API_KEY and swaps in the real key only at the approved endpoint.
 COPY --chown=goose:goose custom_enmaas.json /workspace/.config/goose/custom_providers/custom_enmaas.json
 COPY --chown=goose:goose goose-config.yaml /workspace/.config/goose/config.yaml
-# Agent context: interaction + sandbox-awareness hints, and recipes
+# Agent context: interaction + sandbox-awareness hints, recipes, skills and agents
 COPY --chown=goose:goose goosehints /workspace/.config/goose/.goosehints
 COPY --chown=goose:goose recipes /workspace/.config/goose/recipes
+COPY --chown=goose:goose skills /workspace/.config/goose/skills
+COPY --chown=goose:goose skills /workspace/.agents/skills
+COPY --chown=goose:goose agents /workspace/.agents/agents
 
 USER goose
 WORKDIR /workspace
