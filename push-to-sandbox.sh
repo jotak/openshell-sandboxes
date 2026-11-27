@@ -4,7 +4,7 @@
 # .git, and `git clone` from inside is blocked by the read-only network policy).
 #
 # Usage:
-#   push-to-sandbox.sh /path/to/repo [name-in-sandbox]
+#   push-to-sandbox.sh [-o] /path/to/repo [name-in-sandbox]
 #
 # - The sandbox copy lives at /workspace/<name-in-sandbox> (default: the repo's
 #   basename). The name may deliberately differ from the basename: push the same
@@ -18,6 +18,10 @@
 # - Push again (refresh): re-uploads the bundle (same path) and runs
 #   `git fetch origin` inside the sandbox copy. Only origin/* refs move; the
 #   agent's branches and working tree are never touched.
+# - Push again with -o (overwrite): deletes /workspace/<name> and re-clones it
+#   from the uploaded bundle — a pristine checkout of the host's current
+#   branch. Everything done in the sandbox copy is discarded unconditionally
+#   (pull-from-sandbox.sh first if you want to keep any of it).
 # - Uncommitted host changes are NOT shipped (bundles carry commits only);
 #   the script warns when the work tree is dirty.
 #
@@ -30,7 +34,16 @@ WORKSPACE="/workspace"
 
 die() { echo "error: $*" >&2; exit 1; }
 
-[[ $# -ge 1 && $# -le 2 ]] || die "usage: $0 /path/to/repo [name-in-sandbox]"
+OVERWRITE=0
+while getopts ":o" opt; do
+  case $opt in
+    o) OVERWRITE=1 ;;
+    \?) die "unknown option: -$OPTARG (usage: $0 [-o] /path/to/repo [name-in-sandbox])" ;;
+  esac
+done
+shift $((OPTIND - 1))
+
+[[ $# -ge 1 && $# -le 2 ]] || die "usage: $0 [-o] /path/to/repo [name-in-sandbox]"
 
 HOST_REPO=$1
 NAME=${2:-}
@@ -65,13 +78,24 @@ openshell sandbox upload "$SANDBOX_NAME" "$TMP/$BUNDLE" \
 openshell sandbox exec "$SANDBOX_NAME" -- true \
   || die "cannot exec into $SANDBOX_NAME (sandbox running?)"
 
+IS_REPO=0
 if openshell sandbox exec "$SANDBOX_NAME" -- git -C "$WORKSPACE/$NAME" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+  IS_REPO=1
+fi
+
+if [[ $IS_REPO -eq 1 && $OVERWRITE -ne 1 ]]; then
   echo ">> $WORKSPACE/$NAME already exists — refreshing origin/* from the new bundle"
   openshell sandbox exec "$SANDBOX_NAME" -- git -C "$WORKSPACE/$NAME" fetch origin
   echo ">> done. origin/* now matches this push; the agent's branches and working tree were not touched."
-elif openshell sandbox exec "$SANDBOX_NAME" -- test -e "$WORKSPACE/$NAME"; then
-  die "$WORKSPACE/$NAME exists but is not a git repo (plain upload?) — remove it or pick another name"
+  echo ">> re-run with -o to delete the sandbox copy and re-clone it from this bundle instead"
 else
+  if [[ $IS_REPO -eq 1 ]]; then
+    # -o: wipe the existing copy for a fresh clone, no questions asked.
+    echo ">> -o: removing $WORKSPACE/$NAME for a fresh clone"
+    openshell sandbox exec "$SANDBOX_NAME" -- rm -rf "$WORKSPACE/$NAME"
+  elif openshell sandbox exec "$SANDBOX_NAME" -- test -e "$WORKSPACE/$NAME"; then
+    die "$WORKSPACE/$NAME exists but is not a git repo (plain upload?) — remove it or pick another name"
+  fi
   echo ">> cloning into $WORKSPACE/$NAME (origin = the uploaded bundle, branches appear as origin/*)"
   openshell sandbox exec "$SANDBOX_NAME" -- git clone "$WORKSPACE/$BUNDLE" "$WORKSPACE/$NAME"
   echo ">> done."
