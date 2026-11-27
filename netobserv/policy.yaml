@@ -107,6 +107,22 @@ network_policies:
         protocol: rest
         access: read-only
         enforcement: enforce
+      # Web search (for web-search skill — baked-in, was hot-reloaded)
+      - host: duckduckgo.com
+        port: 443
+        protocol: rest
+        access: read-only
+        enforcement: enforce
+      - host: "**.duckduckgo.com"
+        port: 443
+        protocol: rest
+        access: read-only
+        enforcement: enforce
+      - host: search.yahoo.com
+        port: 443
+        protocol: rest
+        access: read-only
+        enforcement: enforce
       # Q&A and reference
       - host: "**.stackoverflow.com"
         port: 443
@@ -135,6 +151,242 @@ network_policies:
         access: read-only
         enforcement: enforce
       - host: "**.goose-docs.ai"
+        port: 443
+        protocol: rest
+        access: read-only
+        enforcement: enforce
+      # Container registries and operator ecosystem
+      - host: quay.io
+        port: 443
+        protocol: rest
+        access: read-only
+        enforcement: enforce
+      - host: "**.quay.io"
+        port: 443
+        protocol: rest
+        access: read-only
+        enforcement: enforce
+      - host: operatorhub.io
+        port: 443
+        protocol: rest
+        access: read-only
+        enforcement: enforce
+      - host: "**.operatorhub.io"
+        port: 443
+        protocol: rest
+        access: read-only
+        enforcement: enforce
+      - host: helm.sh
+        port: 443
+        protocol: rest
+        access: read-only
+        enforcement: enforce
+      - host: "**.helm.sh"
+        port: 443
+        protocol: rest
+        access: read-only
+        enforcement: enforce
+      - host: pkg.go.dev
+        port: 443
+        protocol: rest
+        access: read-only
+        enforcement: enforce
+      - host: operator-framework.io
+        port: 443
+        protocol: rest
+        access: read-only
+        enforcement: enforce
+      - host: "**.operator-framework.io"
+        port: 443
+        protocol: rest
+        access: read-only
+        enforcement: enforce
+      - host: opencontainers.org
+        port: 443
+        protocol: rest
+        access: read-only
+        enforcement: enforce
+      - host: "**.opencontainers.org"
+        port: 443
+        protocol: rest
+        access: read-only
+        enforcement: enforce
+      # eBPF / kernel / Linux
+      - host: ebpf.io
+        port: 443
+        protocol: rest
+        access: read-only
+        enforcement: enforce
+      - host: "**.ebpf.io"
+        port: 443
+        protocol: rest
+        access: read-only
+        enforcement: enforce
+      - host: cilium.io
+        port: 443
+        protocol: rest
+        access: read-only
+        enforcement: enforce
+      - host: "**.cilium.io"
+        port: 443
+        protocol: rest
+        access: read-only
+        enforcement: enforce
+      - host: kernel.org
+        port: 443
+        protocol: rest
+        access: read-only
+        enforcement: enforce
+      - host: "**.kernel.org"
+        port: 443
+        protocol: rest
+        access: read-only
+        enforcement: enforce
+      - host: bpfman.io
+        port: 443
+        protocol: rest
+        access: read-only
+        enforcement: enforce
+      - host: "**.bpfman.io"
+        port: 443
+        protocol: rest
+        access: read-only
+        enforcement: enforce
+      # Kubernetes / OpenShift
+      - host: kubernetes.io
+        port: 443
+        protocol: rest
+        access: read-only
+        enforcement: enforce
+      - host: "**.kubernetes.io"
+        port: 443
+        protocol: rest
+        access: read-only
+        enforcement: enforce
+      - host: k8s.io
+        port: 443
+        protocol: rest
+        access: read-only
+        enforcement: enforce
+      - host: "**.k8s.io"
+        port: 443
+        protocol: rest
+        access: read-only
+        enforcement: enforce
+      - host: openshift.com
+        port: 443
+        protocol: rest
+        access: read-only
+        enforcement: enforce
+      - host: "**.openshift.com"
+        port: 443
+        protocol: rest
+        access: read-only
+        enforcement: enforce
+      # Observability (Prometheus, Grafana/Loki, Kafka)
+      - host: prometheus.io
+        port: 443
+        protocol: rest
+        access: read-only
+        enforcement: enforce
+      - host: "**.prometheus.io"
+        port: 443
+        protocol: rest
+        access: read-only
+        enforcement: enforce
+      - host: grafana.com
+        port: 443
+        protocol: rest
+        access: read-only
+        enforcement: enforce
+      - host: "**.grafana.com"
+        port: 443
+        protocol: rest
+        access: read-only
+        enforcement: enforce
+      - host: apache.org
+        port: 443
+        protocol: rest
+        access: read-only
+        enforcement: enforce
+      - host: "**.apache.org"
+        port: 443
+        protocol: rest
+        access: read-only
+        enforcement: enforce
+      - host: strimzi.io
+        port: 443
+        protocol: rest
+        access: read-only
+        enforcement: enforce
+      - host: "**.strimzi.io"
+        port: 443
+        protocol: rest
+        access: read-only
+        enforcement: enforce
+      # Frontend (React, Patternfly, MDN, Node)
+      - host: react.dev
+        port: 443
+        protocol: rest
+        access: read-only
+        enforcement: enforce
+      - host: "**.react.dev"
+        port: 443
+        protocol: rest
+        access: read-only
+        enforcement: enforce
+      - host: patternfly.org
+        port: 443
+        protocol: rest
+        access: read-only
+        enforcement: enforce
+      - host: "**.patternfly.org"
+        port: 443
+        protocol: rest
+        access: read-only
+        enforcement: enforce
+      - host: nodejs.org
+        port: 443
+        protocol: rest
+        access: read-only
+        enforcement: enforce
+      - host: "**.nodejs.org"
+        port: 443
+        protocol: rest
+        access: read-only
+        enforcement: enforce
+      - host: developer.mozilla.org
+        port: 443
+        protocol: rest
+        access: read-only
+        enforcement: enforce
+      - host: "**.mozilla.org"
+        port: 443
+        protocol: rest
+        access: read-only
+        enforcement: enforce
+      # Standards / RFCs
+      - host: rfc-editor.org
+        port: 443
+        protocol: rest
+        access: read-only
+        enforcement: enforce
+      - host: "**.rfc-editor.org"
+        port: 443
+        protocol: rest
+        access: read-only
+        enforcement: enforce
+      - host: ietf.org
+        port: 443
+        protocol: rest
+        access: read-only
+        enforcement: enforce
+      - host: "**.ietf.org"
+        port: 443
+        protocol: rest
+        access: read-only
+        enforcement: enforce
+      - host: datatracker.ietf.org
         port: 443
         protocol: rest
         access: read-only

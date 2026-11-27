@@ -19,7 +19,9 @@ FROM fedora:44
 # Fedora's fd-find ships the binary as `fd` directly (Debian needs fdfind).
 RUN dnf install -y --setopt=install_weak_deps=False \
       ca-certificates curl git ripgrep fd-find jq zip unzip bzip2 xz tar gzip \
-      python3 python3-pip procps less findutils \
+      diffutils patch which file man-db man-pages \
+      python3 python3-pip procps-ng procps less findutils \
+      shellcheck yq \
     && dnf clean all
 
 # --- Node.js 24 (matches the host and web-console's runtime image; its CI floor is 22).
@@ -47,7 +49,11 @@ RUN case "$(uname -m)" in \
     esac && \
     curl -fsSL "https://go.dev/dl/go${GO_VERSION}.linux-${ARCH}.tar.gz" | tar -C /usr/local -xz
 
-ENV PATH=/usr/local/go/bin:$PATH
+ENV PATH=/usr/local/go/bin:/usr/local/bin:$PATH \
+    GOPATH=/go
+
+# Shell formatting (agent-agnostic, lives in base so any future agent benefits)
+RUN go install mvdan.cc/sh/v3/cmd/shfmt@latest && ln -sf /go/bin/shfmt /usr/local/bin/shfmt
 
 # Git identity for commits made inside the sandbox. System scope (/etc):
 # root-owned and read-only at runtime, so the agent commits as the user but

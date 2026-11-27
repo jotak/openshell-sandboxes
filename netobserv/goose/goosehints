@@ -18,14 +18,20 @@ Environment:
   GOPATH=/home/goose/go) and /tmp are writable too. Everything else (/usr, /etc,
   /opt...) is read-only — apt/dnf cannot install anything.
 - No container runtime, no Kubernetes/OpenShift cluster, no systemd inside.
-- Installed: go, clang/llvm, node+npm, python3. `go install`ed tools land in
-  /home/goose/go/bin (on PATH).
+- Installed: go, clang/llvm, node+npm, python3, diffutils/patch/which/file/man, jq/yq, ripgrep/fd, make/gcc, shellcheck/shfmt.
+  `go install`ed tools (shfmt, controller-gen, bpf2go, …) land in /home/goose/go/bin (on PATH).
 
 Network — default-deny with a read-only allowlist (GET/HEAD/OPTIONS only):
 - Allowed hosts (snapshot 2026-11): github.com, **.github.com,
-  **.githubusercontent.com, **.golang.org, go.dev, registry.npmjs.org,
-  pypi.org, **.pythonhosted.org, crates.io, **.redhat.com, **.nvidia.com,
-  huggingface.co. All POST/PUT/PATCH is blocked everywhere.
+  **.githubusercontent.com, **.golang.org, go.dev, pkg.go.dev, registry.npmjs.org,
+  pypi.org, **.pythonhosted.org, crates.io, **.redhat.com, quay.io, **.quay.io,
+  **.nvidia.com, huggingface.co, ebpf.io, **.ebpf.io, cilium.io, **.cilium.io,
+  kernel.org, **.kernel.org, kubernetes.io, **.kubernetes.io, k8s.io, **.k8s.io,
+  openshift.com, **.openshift.com, helm.sh, **.helm.sh, prometheus.io, **.prometheus.io,
+  grafana.com, **.grafana.com, apache.org, **.apache.org, strimzi.io, **.strimzi.io,
+  react.dev, **.react.dev, patternfly.org, **.patternfly.org, nodejs.org, **.nodejs.org,
+  rfc-editor.org, **.rfc-editor.org, ietf.org, **.ietf.org, developer.mozilla.org.
+  All POST/PUT/PATCH is blocked everywhere.
 
 Recognize these instantly instead of debugging them:
 - git clone/push/fetch over HTTPS fails with HTTP 403 on POST /git-upload-pack

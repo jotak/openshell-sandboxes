@@ -31,6 +31,8 @@ ENV PATH=/home/goose/go/bin:$PATH \
 RUN curl -fsSL https://github.com/aaif-goose/goose/releases/download/stable/download_cli.sh \
       | GOOSE_BIN_DIR=/usr/local/bin CONFIGURE=false bash
 
+# shfmt now lives in base image (agent-agnostic), no per-agent install needed.
+
 # Non-root workload identity (OpenShell rejects root workloads by default).
 # UID 1001 kept from the earlier ubuntu-based image (where UID 1000 was taken
 # by the stock `ubuntu` user); Fedora's base image has no stock user, so any
