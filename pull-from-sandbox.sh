@@ -17,11 +17,11 @@
 # Commits keep their exact SHAs. Nothing is ever pushed and nothing that is not
 # a fast-forward is ever rewritten — the summary prints the push commands.
 #
-# Env: SANDBOX_NAME (default: goose-desktop)
+# Env: SANDBOX_NAME (default: goose-agent)
 
 set -euo pipefail
 
-SANDBOX_NAME="${SANDBOX_NAME:-goose-desktop}"
+SANDBOX_NAME="${SANDBOX_NAME:-goose-agent}"
 WORKSPACE="/workspace"
 
 die() { echo "error: $*" >&2; exit 1; }

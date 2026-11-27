@@ -1,5 +1,4 @@
 # goose desktop-agent sandbox image
-# Build:  podman build -t goose-desktop-agent:latest ~/Documents/openshell-setup/
 #
 # Contains the goose CLI plus a sane toolchain for the developer extension.
 # goose runs as `goose serve` (ACP backend) and is driven by goose Desktop on

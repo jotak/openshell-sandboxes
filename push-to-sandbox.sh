@@ -25,11 +25,11 @@
 # - Uncommitted host changes are NOT shipped (bundles carry commits only);
 #   the script warns when the work tree is dirty.
 #
-# Env: SANDBOX_NAME (default: goose-desktop)
+# Env: SANDBOX_NAME (default: goose-agent)
 
 set -euo pipefail
 
-SANDBOX_NAME="${SANDBOX_NAME:-goose-desktop}"
+SANDBOX_NAME="${SANDBOX_NAME:-goose-agent}"
 WORKSPACE="/workspace"
 
 die() { echo "error: $*" >&2; exit 1; }
